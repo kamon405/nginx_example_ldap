@@ -1,0 +1,28 @@
+http {
+    ldap_server my_ldap_server {
+        url ldap://ldap.example.com:389/dc=example,dc=com?uid?sub?(objectClass=person);
+        binddn "cn=admin,dc=example,dc=com";
+        binddn_passwd "admin_password";
+        group_attribute member;
+        group_attribute_is_dn on;
+        require valid_user;
+    }
+
+    server {
+        listen 80;
+        server_name my_dashboard;
+
+        location / {
+            include uwsgi_params;
+            uwsgi_pass unix:/tmp/uwsgi.sock;
+        }
+
+        location /dashboard {
+            auth_ldap "Forbidden";
+            auth_ldap_servers my_ldap_server;
+
+            include uwsgi_params;
+            uwsgi_pass unix:/tmp/uwsgi.sock;
+        }
+    }
+}
