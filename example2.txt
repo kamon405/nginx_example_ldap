@@ -1,0 +1,18 @@
+http {
+    ...
+
+    server {
+        listen 80;
+        server_name myserver;
+
+        location / {
+            auth_gss on;
+            auth_gss_keytab /etc/nginx/myserver.keytab;
+            auth_gss_realm MYREALM.COM;
+            auth_gss_service_name HTTP/myserver.myrealm.com;
+
+            include uwsgi_params;
+            uwsgi_pass unix:/path/to/your/uwsgi.sock;
+        }
+    }
+}
