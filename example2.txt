@@ -2,8 +2,11 @@ http {
     ...
 
     server {
-        listen 80;
+        listen 443 ssl;
         server_name myserver;
+
+        ssl_certificate /etc/nginx/myserver.crt;
+        ssl_certificate_key /etc/nginx/myserver.key;
 
         location / {
             auth_gss on;
