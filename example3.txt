@@ -1,0 +1,12 @@
+location /dashboard {
+    auth_gss on;
+    auth_gss_keytab /etc/nginx/myserver.keytab;
+    auth_gss_realm MYREALM.COM;
+    auth_gss_service_name HTTP/myserver.myrealm.com;
+
+    auth_gss_allow_basic_fallback off;
+
+    include uwsgi_params;
+    uwsgi_param REMOTE_USER $remote_user;
+    uwsgi_pass unix:/path/to/your/uwsgi.sock;
+}
